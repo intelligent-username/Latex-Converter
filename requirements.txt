@@ -1,0 +1,5 @@
+pypandoc
+python-docx
+beautifulsoup4
+pylatexenc
+pytest
