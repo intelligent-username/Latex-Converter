@@ -1,4 +1,5 @@
 # .rft: Less complicated version of .docx
+# *Note: Currently doesn't work :(()) because of missing pandoc? Pandoc might be broken b/c it's installed but error says "missing file"
 
 import pypandoc
 
@@ -11,5 +12,5 @@ def convert_to_html(fname):
         print(f"Converted {fname} to HTML successfully.")
         return output_file
     except Exception as e:
-        print(f"Error converting {fname} to HTML: {str(e)}")
+        print(f"\nError converting {fname} to HTML: \n\n--------{str(e)}\n---------")
         return None

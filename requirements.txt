@@ -1,4 +1,5 @@
 pypandoc
+pandoc
 python-docx
 beautifulsoup4
 pylatexenc

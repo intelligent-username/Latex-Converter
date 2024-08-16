@@ -1,5 +1,7 @@
 # Convert Google Docs, Microsoft Word, HTML, and more to LaTeX
 
+![Image](./image.jpg)
+
 ## LaTeX is very tedious to write in. I wrote this program so I can write the main body of my documents in a What-you-see-is-what-you-get environment (like Google Docs)
 
 ## Then, I can easily convert to LaTeX, and add the parts that require more attention (like formulas) manually
@@ -21,7 +23,7 @@
 - Markdown (.md)
 - HTML (.html)
 - Plain text (.txt)
-- Rich text format (.rtf)
+- Rich text format (.rtf) (this one might break)
 
 You need to have the Python programming language (version 3.1 or later (I use 3.11.7)) installed.
 Once you have Python, the required libraries can be downloaded by typing:
