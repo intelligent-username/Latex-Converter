@@ -1,14 +1,17 @@
 # Used by LibreOffice and OpenOffice, and other open-source processors.
 
-import subprocess
+from markdown import markdown
 
 def convert_to_html(fname):
     output_file = fname.rsplit('.', 1)[0] + '.html'
     
-    try:
-        subprocess.run(['soffice', '--headless', '--convert-to', 'html', fname], check=True)
-        print(f"Converted {fname} to HTML successfully.")
-        return output_file
-    except subprocess.CalledProcessError:
-        print(f"Error converting {fname} to HTML.")
-        return None
+    with open(fname, 'r', encoding='utf-8') as f:
+        md_content = f.read()
+    
+    html_content = markdown(md_content, extensions=['tables', 'fenced_code'])
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(f"<html><body>{html_content}</body></html>")
+    
+    print(f"Converted {fname} to HTML successfully.")
+    return output_file
