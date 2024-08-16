@@ -3,3 +3,5 @@ python-docx
 beautifulsoup4
 pylatexenc
 pytest
+markdown
+lxml

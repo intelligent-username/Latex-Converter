@@ -21,7 +21,7 @@
 - Plain text (.txt)
 - Rich text format (.rtf)
 
-You need to have the Python programming language installed.
+You need to have the Python programming language (version 3.1 or later) installed.
 Once you have Python, the required libraries can be downloaded by typing:
 
 ```python
