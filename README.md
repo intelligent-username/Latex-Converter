@@ -1,6 +1,8 @@
 # Convert Google Docs, Microsoft Word, HTML, and Markup files to LaTeX
 
-## LaTeX is very annoying to write in, so I wrote this so I can write the main body of my documents in a What-you-see-is-what-you-get environment (like Google Docs). Then, I can easily convert to LaTeX, and add the parts that require more attention (like formulas) manually
+## LaTeX is very tedious to write in. I wrote this program so I can write the main body of my documents in a What-you-see-is-what-you-get environment (like Google Docs). 
+
+## Then, I can easily convert to LaTeX, and add the parts that require more attention (like formulas) manually
 
 ### This program will save time by
 
