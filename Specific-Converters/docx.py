@@ -1,4 +1,4 @@
-# Used by Microsoft word 2007 and onwards and Google Docs
+# .docx: Used by Microsoft word 2007 and onwards and Google Docs
 
 from docx import Document
 from bs4 import BeautifulSoup, Tag

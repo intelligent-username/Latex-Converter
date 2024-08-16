@@ -1,4 +1,4 @@
-# Plain Text files
+# .txt: Plain Text files
 
 from html import escape
 

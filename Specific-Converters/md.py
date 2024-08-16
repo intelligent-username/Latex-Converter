@@ -1,4 +1,4 @@
-# Lighter HTML, more rare but good
+# .md: Just markdown (lighter HTML)
 
 from markdown import markdown
 

@@ -62,43 +62,69 @@ def main():
 # Convert the HTML to LaTeX, return to main
 def latexer(htmlfile):
     print("Converting to final state...")
-    
     with open(htmlfile, 'r', encoding='utf-8') as f:
         soup = BeautifulSoup(f, 'html.parser')
-    
-    latex_content = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\begin{document}\n\n"
-    
+
+    latex_content = [
+        "\\documentclass{article}",
+        "\\usepackage[utf8]{inputenc}",
+        "\\usepackage{hyperref}",
+        "\\usepackage{graphicx}",
+        "\\usepackage{amsmath}",
+        "\\begin{document}",
+        ""
+    ]
+
+    def escape_latex(text):
+        chars = {
+            '&': '\\&', '%': '\\%', '$': '\\$', '#': '\\#', '_': '\\_',
+            '{': '\\{', '}': '\\}', '~': '\\textasciitilde{}',
+            '^': '\\textasciicircum{}'
+        }
+        return ''.join(chars.get(c, c) for c in text)
+
     for tag in soup.find_all():
-        if tag.name == 'h1':
-            latex_content += f"\\section{{{tag.text}}}\n\n"
-        elif tag.name == 'h2':
-            latex_content += f"\\subsection{{{tag.text}}}\n\n"
+        if tag.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+            level = int(tag.name[1])
+            command = ['section', 'subsection', 'subsubsection', 'paragraph', 'subparagraph', 'subparagraph'][level-1]
+            latex_content.append(f"\\{command}{{{escape_latex(tag.text)}}}\n")
         elif tag.name == 'p':
-            latex_content += f"{tag.text}\n\n"
-        elif tag.name == 'ul':
-            latex_content += "\\begin{itemize}\n"
-            for li in tag.find_all('li'):
-                latex_content += f"\\item {li.text}\n"
-            latex_content += "\\end{itemize}\n\n"
-        elif tag.name == 'ol':
-            latex_content += "\\begin{enumerate}\n"
-            for li in tag.find_all('li'):
-                latex_content += f"\\item {li.text}\n"
-            latex_content += "\\end{enumerate}\n\n"
+            latex_content.append(f"{escape_latex(tag.text)}\n\n")
+        elif tag.name in ['ul', 'ol']:
+            env = 'itemize' if tag.name == 'ul' else 'enumerate'
+            latex_content.append(f"\\begin{{{env}}}")
+            for li in tag.find_all('li', recursive=False):
+                latex_content.append(f"\\item {escape_latex(li.text)}")
+            latex_content.append(f"\\end{{{env}}}\n")
         elif tag.name == 'table':
             cols = len(tag.find('tr').find_all(['th', 'td']))
-            latex_content += f"\\begin{{tabular}}{{{'|c' * cols}|}}\n\\hline\n"
+            latex_content.append(f"\\begin{{tabular}}{{{'|c' * cols}|}}")
+            latex_content.append("\\hline")
             for row in tag.find_all('tr'):
                 cells = row.find_all(['th', 'td'])
-                latex_content += " & ".join(cell.text for cell in cells) + " \\\\ \\hline\n"
-            latex_content += "\\end{tabular}\n\n"
-    
-    latex_content += "\\end{document}"
-    
+                latex_content.append(" & ".join(escape_latex(cell.text.strip()) for cell in cells) + " \\\\ \\hline")
+            latex_content.append("\\end{tabular}\n")
+        elif tag.name == 'a':
+            href = tag.get('href', '')
+            latex_content.append(f"\\href{{{href}}}{{{escape_latex(tag.text)}}}")
+        elif tag.name == 'img':
+            src = tag.get('src', '')
+            alt = tag.get('alt', 'image')
+            latex_content.append(f"\\includegraphics[width=0.8\\textwidth]{{{src}}}")
+            latex_content.append(f"\\caption{{{escape_latex(alt)}}}")
+        elif tag.name in ['b', 'strong']:
+            latex_content.append(f"\\textbf{{{escape_latex(tag.text)}}}")
+        elif tag.name in ['i', 'em']:
+            latex_content.append(f"\\textit{{{escape_latex(tag.text)}}}")
+        elif tag.name == 'code':
+            latex_content.append(f"\\texttt{{{escape_latex(tag.text)}}}")
+
+    latex_content.append("\\end{document}")
+
     output_file = htmlfile.rsplit('.', 1)[0] + '.tex'
     with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(latex_content)
-    
+        f.write('\n'.join(latex_content))
+
     print(f"Converted {htmlfile} to LaTeX successfully.")
     return output_file
 
