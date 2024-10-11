@@ -6,7 +6,7 @@ import os
 def main():
     fname = input("Enter the (exact) name of the file you want to convert (Ensure it's in the same directory as this runner.py): ")
     
-    # Make sure to check ending with the dot so the name of the file itself doesn't contain the extension  
+    # Make sure to check ending with the dot so the name of the file itself doesn't contain the extension
     if fname.endswith(".tex"):
         print("This is already a LaTeX file")
         return 0
@@ -14,11 +14,11 @@ def main():
     if fname.endswith(".html"):
         return latexer(fname)
     
-    print("File Received. Converting...", end="")    
+    print("File Received. Converting...", end="")
     htmlfile = None
 
     # Convert file to HTML
-    # Could use loop of some sort but more efficient to just use series of elif statements
+    # Could have uses a loop of some sort but more efficient to just use series of elif statements
 
     if fname.endswith(".doc"):
         doc_converter = import_module("Specific-Converters.doc")
@@ -59,7 +59,8 @@ def main():
         print("Failed to convert the file to HTML.")
         return
 
-# Convert the HTML to LaTeX, return to main
+# Convert the HTML to LaTeX
+# Then return the LaTeX file to main
 def latexer(htmlfile):
     print("Converting to final state...")
     with open(htmlfile, 'r', encoding='utf-8') as f:
@@ -88,34 +89,43 @@ def latexer(htmlfile):
             level = int(tag.name[1])
             command = ['section', 'subsection', 'subsubsection', 'paragraph', 'subparagraph', 'subparagraph'][level-1]
             latex_content.append(f"\\{command}{{{escape_latex(tag.text)}}}\n")
+
         elif tag.name == 'p':
             latex_content.append(f"{escape_latex(tag.text)}\n\n")
+        
         elif tag.name in ['ul', 'ol']:
             env = 'itemize' if tag.name == 'ul' else 'enumerate'
             latex_content.append(f"\\begin{{{env}}}")
             for li in tag.find_all('li', recursive=False):
                 latex_content.append(f"\\item {escape_latex(li.text)}")
             latex_content.append(f"\\end{{{env}}}\n")
+        
         elif tag.name == 'table':
             cols = len(tag.find('tr').find_all(['th', 'td']))
             latex_content.append(f"\\begin{{tabular}}{{{'|c' * cols}|}}")
             latex_content.append("\\hline")
+        
             for row in tag.find_all('tr'):
                 cells = row.find_all(['th', 'td'])
                 latex_content.append(" & ".join(escape_latex(cell.text.strip()) for cell in cells) + " \\\\ \\hline")
             latex_content.append("\\end{tabular}\n")
+        
         elif tag.name == 'a':
             href = tag.get('href', '')
             latex_content.append(f"\\href{{{href}}}{{{escape_latex(tag.text)}}}")
+        
         elif tag.name == 'img':
             src = tag.get('src', '')
             alt = tag.get('alt', 'image')
             latex_content.append(f"\\includegraphics[width=0.8\\textwidth]{{{src}}}")
             latex_content.append(f"\\caption{{{escape_latex(alt)}}}")
+        
         elif tag.name in ['b', 'strong']:
             latex_content.append(f"\\textbf{{{escape_latex(tag.text)}}}")
         elif tag.name in ['i', 'em']:
+        
             latex_content.append(f"\\textit{{{escape_latex(tag.text)}}}")
+        
         elif tag.name == 'code':
             latex_content.append(f"\\texttt{{{escape_latex(tag.text)}}}")
 

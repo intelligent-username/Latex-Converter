@@ -35,6 +35,7 @@ Once you have Python, the required libraries can be downloaded by typing:
 in the command line/terminal
 
 Then run the file by typing "python main.py" in the command line/terminal.
+
 The program will ask you to input the name of the file you want to convert. This file needs to be in the same directory as the main.py file (i.e. in the Latex-Converter folder).
+
 Make sure you include the file extension (like .docs or .txt), because the program needs this information.
-That's it for now.
