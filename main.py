@@ -4,7 +4,7 @@ import os
 
 # Start, give instructions, and call on initial conversion
 def main():
-    fname = input("Enter the (exact) name of the file you want to convert (Ensure it's in the same directory as this runner.py): ")
+    fname = input("Enter the (exact) name of the file you want to convert (Ensure it's in the same directory as main.py and include the extension): ")
     
     # Make sure to check ending with the dot so the name of the file itself doesn't contain the extension
     if fname.endswith(".tex"):
